@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.example.org/employee"
+	xmlns:tns="http://www.example.org/employee"
+	elementFormDefault="qualified">
+
+	<!-- Complex type for Employee -->
+	<xs:complexType name="Employee">
+		<xs:sequence>
+			<xs:element name="empId">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:pattern value="[A-Z]{3}[0-9]{3}" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="department" type="xs:string" />
+			<xs:element name="name">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:minLength value="1" />
+						<xs:maxLength value="100" />
+						<xs:pattern value="[A-Za-z ]+" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+
+			<xs:element name="age" type="xs:int" />
+			<xs:element name="gender" type="xs:string" />
+			<xs:element name="email" type="xs:string" />
+			<xs:element name="doj" type="xs:string" />
+			<xs:element name="salary" type="xs:decimal" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<!-- Define the ServiceResponse type -->
+	<xs:complexType name="ServiceResponse">
+		<xs:sequence>
+			<xs:element name="details" type="xs:string" />
+			<xs:element name="message" type="xs:string" />
+			<xs:element name="code" type="xs:string" />
+		</xs:sequence>
+	</xs:complexType>
+	<!-- <xs:complexType name="ServiceResponse"> <xs:sequence> Message element 
+		of type string <xs:element name="message" type="xs:string"/> Code element 
+		of type string <xs:element name="code" type="xs:string"/> Details is a list 
+		of JSON objects <xs:element name="details"> <xs:complexType> <xs:sequence> 
+		<xs:element name="detail" type="xs:string" maxOccurs="unbounded"/> </xs:sequence> 
+		</xs:complexType> </xs:element> </xs:sequence> </xs:complexType> -->
+
+	<!-- Request for adding an employee -->
+	<xs:element name="addEmployeeRequest">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="employee" type="tns:Employee" />
+				<xs:element name="status" type="xs:string" minOccurs="0" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<!-- Response for adding an employee (ServiceResponse) -->
+	<xs:element name="addEmployeeResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="serviceResponse"
+					type="tns:ServiceResponse" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<!-- Request for getting an employee -->
+	<xs:element name="getEmployeeRequest">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="empId" type="xs:string" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<!-- Response for getting an employee (ServiceResponse) -->
+	<xs:element name="getEmployeeResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="serviceResponse"
+					type="tns:ServiceResponse" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<!-- Request for getting all employees -->
+	<xs:element name="getAllEmployeesRequest">
+		<xs:complexType>
+			<xs:sequence>
+				<!-- No parameters needed for requesting all employees -->
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<!-- Response for getting all employees (ServiceResponse + list of employees) -->
+
+	<xs:element name="getAllEmployeesResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="employeeList" maxOccurs="unbounded"
+					minOccurs="0">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="empId" type="xs:string" />
+							<xs:element name="department" type="xs:string" />
+							<xs:element name="name" type="xs:string" />
+							<xs:element name="age" type="xs:int" />
+							<xs:element name="gender" type="xs:string" />
+							<xs:element name="email" type="xs:string" />
+							<xs:element name="doj" type="xs:string" />
+							<xs:element name="salary" type="xs:decimal" />
+							<xs:element name="status" type="xs:string" />
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+
+
+	<!-- Request for updating an employee -->
+	<xs:element name="updateEmployeeRequest">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="employee" type="tns:Employee" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<!-- Response for updating an employee (ServiceResponse) -->
+	<xs:element name="updateEmployeeResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="serviceResponse"
+					type="tns:ServiceResponse" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<!-- Request for deleting an employee -->
+	<xs:element name="deleteEmployeeRequest">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="empId" type="xs:string" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<!-- Response for deleting an employee (ServiceResponse) -->
+	<xs:element name="deleteEmployeeResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="serviceResponse"
+					type="tns:ServiceResponse" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<!-- Request for searching employees -->
+	<xs:element name="searchEmployeeRequest">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="searchParam" type="xs:string" />
+				<xs:element name="iDisplayStart" type="xs:int" />
+				<xs:element name="iDisplayLength" type="xs:int" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<!-- Response for searching employees -->
+	<xs:element name="searchEmployeeResponse">
+    <xs:complexType>
+        <xs:sequence>
+            <!-- aaData: A list of employees -->
+            <xs:element name="aaData">
+                <xs:complexType>
+                    <xs:sequence>
+                        <!-- employeeList can have multiple employees -->
+                        <xs:element name="employeeList" maxOccurs="unbounded">
+                            <xs:complexType>
+                                <xs:sequence>
+                                    <xs:element name="empId" type="xs:string"/>
+                                    <xs:element name="department" type="xs:string"/>
+                                    <xs:element name="name" type="xs:string"/>
+                                    <xs:element name="age" type="xs:int"/>
+                                     <xs:element name="gender" type="xs:string"/>
+                                    <xs:element name="email" type="xs:string"/>
+                                    <xs:element name="doj" type="xs:string"/>
+                                    <xs:element name="salary" type="xs:decimal"/>
+                                    <xs:element name="status" type="xs:string" minOccurs="0"/>
+                                </xs:sequence>
+                            </xs:complexType>
+                        </xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+
+            <!-- Total records for pagination -->
+            <xs:element name="iTotalDisplayRecords" type="xs:long"/>
+            <xs:element name="iTotalRecords" type="xs:long"/>
+        </xs:sequence>
+    </xs:complexType>
+</xs:element>
+
+
+</xs:schema>
+
+
